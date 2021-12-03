@@ -16,7 +16,7 @@
 
 <body>
 	<div class="container">
-		<p id="timer">00:00:00</p>
+		<p id="timer">00:00:00:00</p>
 		
 		<div>
 			<button id="start_stop" class="btn btn-lg btn-primary">START</button>
@@ -25,32 +25,43 @@
 	</div>
 	
 	<script>
+		
+		var start
+		
 		var addZero = function(value) {
-			
-			if (value < 10) {
+			if(value < 10) {
 				value = '0'+value;
 			}
-			
 			return value;
-			
-		};
+		}
 		
 		document.getElementById('start_stop').addEventListener('click', function() {
 			
-			var now = new Date();
-			var seconds = now.getSeconds();
-			seconds = addZero(seconds);
-		
-			var minutes = now.getMinutes();
-			minutes = addZero(minutes);
-		
-			var hours = now.getHours();
-			hours = addZero(hours);
-		
-			document.getElementById('timer').innerHTML = hours+':'+minutes+':'+seconds;
+			start = new Date();
+			
+			setInterval(goTimer, 10);
 			
 		});
 		
+		var goTimer = function() {
+			var now = new Date();
+			
+			var milli = now.getTime() - start.getTime();
+			var seconds = Math.floor(milli/1000);
+			var msec = Math.floor((milli - seconds*1000)/10);
+			var minutes = Math.floor(seconds/60);
+			var hours = Math.floor(minutes/60);
+			
+			seconds = seconds - minutes*60;
+			minutes = minutes - hours*60;
+			
+			hours = addZero(hours);
+			seconds = addZero(seconds);
+			msec = addZero(msec);
+			minutes = addZero(minutes);
+			
+			document.getElementById('timer').innerHTML = hours+':'+minutes+':'+seconds+':'+msec;
+		}
 		
 	</script>
 	
